@@ -1,4 +1,5 @@
 import pymysql
+from flask import abort
 from util.DB import DB
 
 
@@ -11,7 +12,7 @@ class dbConnect:
             cur.execute(sql, (uid, name, email, password))
             conn.commit()
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -26,7 +27,7 @@ class dbConnect:
             user = cur.fetchone()
             return user
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -41,7 +42,7 @@ class dbConnect:
             channels = cur.fetchall()
             return channels
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -56,7 +57,7 @@ class dbConnect:
             channel = cur.fetchone()
             return channel
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -71,7 +72,7 @@ class dbConnect:
             channel = cur.fetchone()
             return channel
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -85,7 +86,7 @@ class dbConnect:
             cur.execute(sql, (uid, newChannelName, newChannelDescription))
             conn.commit()
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -99,7 +100,7 @@ class dbConnect:
             cur.execute(sql, (channel_name))
             channel = cur.fetchone()
         except Exception as e:
-            print(e + 'が発生しました')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -114,7 +115,7 @@ class dbConnect:
             cur.execute(sql, (uid, newChannelName, newChannelDescription, cid))
             conn.commit()
         except Exception as e:
-            print(e + 'が発生しました')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -129,7 +130,7 @@ class dbConnect:
             cur.execute(sql, (cid))
             conn.commit()
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -144,7 +145,7 @@ class dbConnect:
             messages = cur.fetchall()
             return messages
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -158,7 +159,7 @@ class dbConnect:
             cur.execute(sql, (uid, cid, message))
             conn.commit()
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
@@ -172,7 +173,7 @@ class dbConnect:
             cur.execute(sql, (message_id))
             conn.commit()
         except Exception as e:
-            print(e + 'が発生しています')
+            print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             cur.close()
