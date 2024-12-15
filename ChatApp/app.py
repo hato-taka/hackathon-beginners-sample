@@ -13,7 +13,7 @@ app.secret_key = uuid.uuid4().hex
 app.permanent_session_lifetime = timedelta(days=30)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
 
-# CSSの圧縮と結合
+# CSSファイルのバンドル（圧縮・結合）
 assets = Environment(app)
 css_bundle = Bundle('css/*.css', filters='cssmin', output='gen/bundled.css')
 assets.register('css_all', css_bundle)
@@ -189,10 +189,8 @@ def delete_message(cid, message_id):
     if uid is None:
         return redirect('/login')
 
-
     if message_id:
         Message.delete(message_id)
-
     return redirect('/channels/{cid}/messages'.format(cid = cid))
 
 

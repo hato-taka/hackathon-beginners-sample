@@ -3,7 +3,7 @@ import pymysql
 from util.DB import DB
 
 
-# ユーザーに関するクラス
+# ユーザークラス
 class User:
     def create(uid, name, email, password):
         try:
@@ -34,7 +34,7 @@ class User:
 
 
 
-# チャンネルに関するクラス
+# チャンネルクラス
 class Channel:
     def create(uid, newChannelName, newChannelDescription):
         try:
@@ -123,7 +123,7 @@ class Channel:
 
 
 
-# メッセージに関するクラス
+# メッセージクラス
 class Message:
     def create(uid, cid, message):
         try:
