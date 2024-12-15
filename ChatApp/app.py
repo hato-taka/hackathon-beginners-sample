@@ -11,6 +11,7 @@ from models import User, Channel, Message
 app = Flask(__name__)
 app.secret_key = uuid.uuid4().hex
 app.permanent_session_lifetime = timedelta(days=30)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
 
 # CSSの圧縮と結合
 assets = Environment(app)
