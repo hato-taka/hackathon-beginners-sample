@@ -69,11 +69,11 @@ button {
   transition: all 0.5s;
 }
 
-button.pink {
+.pink, button.pink {
   background-color: var(--salmon_pink);
 }
 
-button.pink:hover {
+.pink, button.pink:hover {
   background-color: var(--middle_pink);
 }
 
