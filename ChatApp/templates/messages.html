@@ -49,15 +49,9 @@
       <form class="typing-box" method="POST" name="newMessageForm">
         <textarea name="message" id="message" autofocus></textarea>
         <input type="hidden" name="cid" value="{{ channel.id }}" />
-        <div id="message-send-tooltip">
-          <button type="submit" id="add-message-button">
-            <ion-icon name="paper-plane"></ion-icon>
-          </button>
-          <div id="message-send-tooltip-description">
-            <p>Command + Enter または</p>
-            <p>Ctrl + Enter</p>
-          </div>
-        </div>
+        <button type="submit" id="add-message-button">
+          <ion-icon name="paper-plane"></ion-icon>
+        </button>
       </form>
     </div>
   </div>
@@ -73,10 +67,6 @@
 ></script>
 <script
   src="{{url_for('static',filename='js/channels/update-channel.js')}}"
-  type="text/javascript"
-></script>
-<script
-  src="{{url_for('static',filename='js/keyboardSendMessage.js')}}"
   type="text/javascript"
 ></script>
 {% endblock %}
