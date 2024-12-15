@@ -4,7 +4,7 @@
 const deleteChannelModal = document.getElementById("delete-channel-modal");
 
 // paginationでチャンネル一覧を追加した後、「チャンネル登録ボタン」を追加
-// ボタンを追加した後に「loadAddChannelButton関数（add-channel.js内）」を呼び出したい。
+// ボタンを追加した後に「loadCreateChannelButton関数（create-channel.js内）」を呼び出したい。
 // なのでここのpagination関数はasyncにしている。
 const pagination = async () => {
   let page = 1; // 今何ページ目にいるか
@@ -50,7 +50,7 @@ const pagination = async () => {
       if (i < firstChannelInPage - 1 || i > lastChannelInPage - 1) return;
       const a = document.createElement("a");
       const li = document.createElement("li");
-      const channelURL = `/detail/${channel.id}`;
+      const channelURL = `/channels/${channel.id}/messages`;
       a.innerText = channel.name;
       a.setAttribute("href", channelURL);
       li.appendChild(a);
@@ -65,12 +65,12 @@ const pagination = async () => {
         // ゴミ箱ボタンが押された時にdeleteモーダルを表示させる
         deleteButton.addEventListener("click", () => {
           deleteChannelModal.style.display = "flex";
-          const confirmationButtonLink = document.getElementById(
-            "delete-confirmation-link"
+          const deleteChannelForm = document.getElementById(
+            "deleteChannelForm"
           );
-          // aタグにhrefを追加
-          const channelURL = `/delete/${channel.id}`;
-          confirmationButtonLink.setAttribute("href", channelURL);
+
+          const endpoint = `/channels/delete/${channel.id}`;
+          deleteChannelForm.action = endpoint
         });
       }
 
@@ -91,11 +91,11 @@ const pagination = async () => {
       }
     });
     // チャンネル追加ボタンを付け加える
-    const addChannelButton = document.createElement("ion-icon");
-    addChannelButton.id = "add-channel-button";
-    addChannelButton.name = "add-circle-outline";
-    addChannelButton.style = "color: #122543";
-    ul.appendChild(addChannelButton);
+    const createChannelButton = document.createElement("ion-icon");
+    createChannelButton.id = "create-channel-button";
+    createChannelButton.name = "add-circle-outline";
+    createChannelButton.style = "color: #122543";
+    ul.appendChild(createChannelButton);
   };
   // pagination内で現在選択されているページの番号に色を付ける
   const colorPaginationNum = () => {
@@ -118,7 +118,7 @@ const pagination = async () => {
     page = page - 1;
     show(page, STEP);
     colorPaginationNum();
-    loadAddChannelButton();
+    loadCreateChannelButton();
   });
 
   // 次ページ遷移
@@ -127,12 +127,12 @@ const pagination = async () => {
     page = page + 1;
     show(page, STEP);
     colorPaginationNum();
-    loadAddChannelButton();
+    loadCreateChannelButton();
   });
 };
 
 // 画面がロードされる時の処理
 window.onload = () => {
   // pagination関数（asyncが完了したらチャンネル追加ボタンを読み込む）
-  pagination().then(loadAddChannelButton);
+  pagination().then(loadCreateChannelButton);
 };
