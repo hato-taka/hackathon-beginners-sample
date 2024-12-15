@@ -1,10 +1,11 @@
-import pymysql
 from flask import abort
+import pymysql
 from util.DB import DB
 
 
-class dbConnect:
-    def createUser(uid, name, email, password):
+# ユーザーに関するクラス
+class User:
+    def create(uid, name, email, password):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -18,7 +19,7 @@ class dbConnect:
             cur.close()
 
 
-    def getUser(email):
+    def find_by_email(email):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -33,7 +34,23 @@ class dbConnect:
             cur.close()
 
 
-    def getChannelAll():
+# チャンネルに関するクラス
+class Channel:
+    def create(uid, newChannelName, newChannelDescription):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "INSERT INTO channels (uid, name, abstract) VALUES (%s, %s, %s);"
+            cur.execute(sql, (uid, newChannelName, newChannelDescription))
+            conn.commit()
+        except Exception as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            cur.close()
+
+
+    def get_all():
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -48,7 +65,7 @@ class dbConnect:
             cur.close()
 
 
-    def getChannelById(cid):
+    def find_by_CID(cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -63,7 +80,7 @@ class dbConnect:
             cur.close()
 
 
-    def getChannelByName(channel_name):
+    def find_by_name(channel_name):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -78,36 +95,7 @@ class dbConnect:
             cur.close()
 
 
-    def addChannel(uid, newChannelName, newChannelDescription):
-        try:
-            conn = DB.getConnection()
-            cur = conn.cursor()
-            sql = "INSERT INTO channels (uid, name, abstract) VALUES (%s, %s, %s);"
-            cur.execute(sql, (uid, newChannelName, newChannelDescription))
-            conn.commit()
-        except Exception as e:
-            print(f'エラーが発生しています：{e}')
-            abort(500)
-        finally:
-            cur.close()
-
-
-    def getChannelByName(channel_name):
-        try:
-            conn = DB.getConnection()
-            cur = conn.cursor()
-            sql = "SELECT * FROM channels WHERE name=%s;"
-            cur.execute(sql, (channel_name))
-            channel = cur.fetchone()
-        except Exception as e:
-            print(f'エラーが発生しています：{e}')
-            abort(500)
-        finally:
-            cur.close()
-            return channel
-
-
-    def updateChannel(uid, newChannelName, newChannelDescription, cid):
+    def update(uid, newChannelName, newChannelDescription, cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -121,8 +109,7 @@ class dbConnect:
             cur.close()
 
 
-    #deleteチャンネル関数
-    def deleteChannel(cid):
+    def delete(cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -136,7 +123,23 @@ class dbConnect:
             cur.close()
 
 
-    def getMessageAll(cid):
+# メッセージに関するクラス
+class Message:
+    def create(uid, cid, message):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "INSERT INTO messages(uid, cid, message) VALUES(%s, %s, %s)"
+            cur.execute(sql, (uid, cid, message))
+            conn.commit()
+        except Exception as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            cur.close()
+
+
+    def get_all(cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
@@ -151,21 +154,7 @@ class dbConnect:
             cur.close()
 
 
-    def createMessage(uid, cid, message):
-        try:
-            conn = DB.getConnection()
-            cur = conn.cursor()
-            sql = "INSERT INTO messages(uid, cid, message) VALUES(%s, %s, %s)"
-            cur.execute(sql, (uid, cid, message))
-            conn.commit()
-        except Exception as e:
-            print(f'エラーが発生しています：{e}')
-            abort(500)
-        finally:
-            cur.close()
-
-
-    def deleteMessage(message_id):
+    def delete(message_id):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
