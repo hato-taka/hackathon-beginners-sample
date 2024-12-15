@@ -1,11 +1,11 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort
-from flask_assets import Environment, Bundle
 from datetime import timedelta
 import hashlib
 import uuid
 import re
 
 from models import User, Channel, Message
+from util.assets import bundle_css_files
 
 
 app = Flask(__name__)
@@ -13,11 +13,7 @@ app.secret_key = uuid.uuid4().hex
 app.permanent_session_lifetime = timedelta(days=30)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
 
-# CSSファイルのバンドル（圧縮・結合）
-assets = Environment(app)
-css_bundle = Bundle('css/*.css', filters='cssmin', output='gen/bundled.css')
-assets.register('css_all', css_bundle)
-css_bundle.build()
+bundle_css_files(app)
 
 
 
