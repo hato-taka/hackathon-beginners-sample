@@ -1,7 +1,7 @@
 import pymysql
 
 class DB:
-    def getConnection():
+    def get_db_connection():
         try:
             conn = pymysql.connect(
             host="db",
