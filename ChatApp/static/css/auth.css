@@ -127,7 +127,7 @@
   margin-bottom: 12px;
 }
 
-.switch-register-mode {
+.switch-auth-mode {
   color: grey;
   line-height: 28px;
   font-size: 14px;
@@ -135,7 +135,7 @@
   padding: 0.5rem 2rem 0 2rem;
 }
 
-.switch-register-mode:hover {
+.switch-auth-mode:hover {
   color: var(--navy_blue);
 }
 
