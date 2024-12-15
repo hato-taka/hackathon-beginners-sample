@@ -124,12 +124,12 @@
   background-color: var(--snow) !important;
 }
 
-#add-channel-button {
+#create-channel-button {
   font-size: 22px;
   padding: 4px 0;
 }
 
-#add-channel-button:hover {
+#create-channel-button:hover {
   cursor: pointer;
 }
 
