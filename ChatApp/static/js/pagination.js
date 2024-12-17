@@ -1,12 +1,15 @@
-// チャンネル一覧ページでレスポンスが返ってきた後、
-// 送られてきたチャンネル一覧の配列をもとにページネーションの追加/チャンネルリストの表示を行う処理。
+/*
+チャンネル一覧ページでレスポンスが返ってきた後、
+チャンネル一覧の配列データをもとにページネーションの作成・制御をする
+*/
 
 const deleteChannelModal = document.getElementById("delete-channel-modal");
 
-// paginationでチャンネル一覧を追加した後、「チャンネル登録ボタン」を追加
-// ボタンを追加した後に「loadCreateChannelButton関数（create-channel.js内）」を呼び出したい。
-// なのでここのpagination関数はasyncにしている。
-const pagination = async () => {
+/*
+ページネーションを作成・制御する関数。
+チャンネル名、削除ボタンを作成・制御。
+*/
+const pagination = () => {
   let page = 1; // 今何ページ目にいるか
   const STEP = 6; // ステップ数（1ページに表示する項目数）
 
@@ -18,7 +21,7 @@ const pagination = async () => {
       ? channels.length / STEP
       : Math.floor(channels.length / STEP) + 1;
 
-  // ページネーションで表示される数字部分(ページ数)の要素を作成
+  // ページネーションで表示されるページ数部分（< PREV 1 2 3 NEXT >）の要素を作成
   const paginationUl = document.querySelector(".pagination");
   let pageCount = 0;
   while (pageCount < TOTAL) {
@@ -36,7 +39,7 @@ const pagination = async () => {
     pageCount++;
   }
 
-  // 各チャンネルのタイトル(と削除ボタン)の要素を作成し、ページを表示する
+  // 各チャンネル名と削除ボタンの要素を作成
   const show = (page, STEP) => {
     const ul = document.querySelector(".channel-box");
     // 一度チャンネルリストを空にする
@@ -65,12 +68,11 @@ const pagination = async () => {
         // ゴミ箱ボタンが押された時にdeleteモーダルを表示させる
         deleteButton.addEventListener("click", () => {
           deleteChannelModal.style.display = "flex";
-          const deleteChannelForm = document.getElementById(
-            "deleteChannelForm"
-          );
+          const deleteChannelForm =
+            document.getElementById("deleteChannelForm");
 
           const endpoint = `/channels/delete/${channel.id}`;
-          deleteChannelForm.action = endpoint
+          deleteChannelForm.action = endpoint;
         });
       }
 
@@ -97,7 +99,7 @@ const pagination = async () => {
     createChannelButton.style = "color: #122543";
     ul.appendChild(createChannelButton);
   };
-  // pagination内で現在選択されているページの番号に色を付ける
+  // ページネーション内で現在選択されているページの番号に色を付ける
   const colorPaginationNum = () => {
     // ページネーションの数字部分の全要素から"colored"クラスを一旦取り除く
     const paginationArr = [...document.querySelectorAll(".pagination li")];
@@ -131,7 +133,7 @@ const pagination = async () => {
   });
 };
 
-// 画面がロードされる時の処理
+// 画面がロードされる時の処理（ページネーションを作成し、その後チャンネル追加ボタンを作成・表示）
 window.onload = () => {
   // pagination関数（asyncが完了したらチャンネル追加ボタンを読み込む）
   pagination().then(loadCreateChannelButton);
