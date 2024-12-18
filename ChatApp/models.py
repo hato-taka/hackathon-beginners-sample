@@ -148,7 +148,7 @@ class Message:
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT id,u.uid, user_name, message FROM messages AS m INNER JOIN users AS u ON m.uid = u.uid WHERE cid = %s;"
+                sql = "SELECT id, u.uid, user_name, message FROM messages AS m INNER JOIN users AS u ON m.uid = u.uid WHERE cid = %s ORDER BY id ASC;"
                 cur.execute(sql, (cid))
                 messages = cur.fetchall()
                 return messages
