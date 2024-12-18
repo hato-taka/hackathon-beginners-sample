@@ -36,13 +36,13 @@ class User:
 
 # チャンネルクラス
 class Channel:
-    def create(uid, newChannelName, newChannelDescription):
+    def create(uid, new_channel_name, new_channel_description):
         try:
             conn = DB.get_db_connection()
             with conn:
                 with conn.cursor() as cur:
                     sql = "INSERT INTO channels (uid, name, abstract) VALUES (%s, %s, %s);"
-                    cur.execute(sql, (uid, newChannelName, newChannelDescription))
+                    cur.execute(sql, (uid, new_channel_name, new_channel_description))
                     conn.commit()
         except Exception as e:
             print(f'エラーが発生しています：{e}')
@@ -65,7 +65,7 @@ class Channel:
 
 
 
-    def find_by_CID(cid):
+    def find_by_cid(cid):
         try:
             conn = DB.get_db_connection()
             with conn:
@@ -95,13 +95,13 @@ class Channel:
 
 
 
-    def update(uid, newChannelName, newChannelDescription, cid):
+    def update(uid, new_channel_name, new_channel_description, cid):
         try:
             conn = DB.get_db_connection()
             with conn:
                 with conn.cursor() as cur:
                     sql = "UPDATE channels SET uid=%s, name=%s, abstract=%s WHERE id=%s;"
-                    cur.execute(sql, (uid, newChannelName, newChannelDescription, cid))
+                    cur.execute(sql, (uid, new_channel_name, new_channel_description, cid))
                     conn.commit()
         except Exception as e:
             print(f'エラーが発生しています：{e}')

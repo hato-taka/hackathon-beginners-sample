@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, session, flash, abort
+from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from datetime import timedelta
 import hashlib
 import uuid
@@ -50,8 +50,8 @@ def signup_process():
             User.create(uid, name, email, password)
             UserId = str(uid)
             session['uid'] = UserId
-            return redirect('/channels')
-    return redirect('/signup')
+            return redirect(url_for('channels_view'))
+    return redirect(url_for('signup_process'))
 
 
 # ログインページの表示
@@ -78,23 +78,22 @@ def login_process():
                 flash('パスワードが間違っています！')
             else:
                 session['uid'] = user["uid"]
-                return redirect('/channels')
-    return redirect('/login')
+                return redirect(url_for('channels_view'))
+    return redirect(url_for('login_view'))
 
 
 # ログアウト
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('/login')
+    return redirect(url_for('login_view'))
 
 
 # チャンネル一覧ページの表示
 @app.route('/channels', methods=['GET'])
 def channels_view():
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/login')
+    if 'uid' not in session:
+        return redirect(url_for('login_view'))
     else:
         channels = Channel.get_all()
         channels.reverse()
@@ -106,14 +105,14 @@ def channels_view():
 def create_channel():
     uid = session.get('uid')
     if uid is None:
-        return redirect('/login')
+        return redirect(url_for('login_view'))
 
     channel_name = request.form.get('channelTitle')
     channel = Channel.find_by_name(channel_name)
     if channel == None:
         channel_description = request.form.get('channelDescription')
         Channel.create(uid, channel_name, channel_description)
-        return redirect('/channels')
+        return redirect(url_for('channels_view'))
     else:
         error = '既に同じ名前のチャンネルが存在しています'
         return render_template('error/error.html', error_message=error)
@@ -122,9 +121,8 @@ def create_channel():
 # チャンネルの更新
 @app.route('/channels/update/<cid>', methods=['POST'])
 def update_channel(cid):
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/login')
+    if 'uid' not in session:
+        return redirect(url_for('login_view'))
 
     channel_name = request.form.get('channelTitle')
     channel_description = request.form.get('channelDescription')
@@ -137,27 +135,26 @@ def update_channel(cid):
 # チャンネルの削除
 @app.route('/channels/delete/<cid>', methods=['POST'])
 def delete_channel(cid):
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/login')
+    if 'uid' not in session:
+        return redirect(url_for('login_view'))
+
+    channel = Channel.find_by_cid(cid)
+
+    if channel["uid"] != uid:
+        flash('チャンネルは作成者のみ削除可能です')
     else:
-        channel = Channel.find_by_CID(cid)
-        if channel["uid"] != uid:
-            flash('チャンネルは作成者のみ削除可能です')
-        else:
-            Channel.delete(cid)
-        return redirect ('/channels')
+        Channel.delete(cid)
+    return redirect(url_for('channels_view'))
 
 
 
 # チャンネル詳細ページの表示（各チャンネル内で、そのチャンネルに属している全メッセージを表示させる）
 @app.route('/channels/<cid>/messages', methods=['GET'])
 def detail(cid):
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/login')
+    if 'uid' not in session:
+        return redirect(url_for('login_view'))
 
-    channel = Channel.find_by_CID(cid)
+    channel = Channel.find_by_cid(cid)
     messages = Message.get_all(cid)
 
     return render_template('messages.html', messages=messages, channel=channel, uid=uid)
@@ -166,9 +163,8 @@ def detail(cid):
 # メッセージの投稿
 @app.route('/channels/<cid>/messages', methods=['POST'])
 def create_message(cid):
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/login')
+    if 'uid' not in session:
+        return redirect(url_for('login_view'))
 
     message = request.form.get('message')
 
@@ -181,9 +177,8 @@ def create_message(cid):
 # メッセージの削除
 @app.route('/channels/<cid>/messages/<message_id>', methods=['POST'])
 def delete_message(cid, message_id):
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/login')
+    if 'uid' not in session:
+        return redirect(url_for('login_view'))
 
     if message_id:
         Message.delete(message_id)
@@ -200,4 +195,4 @@ def internal_server_error(error):
     return render_template('error/500.html'),500
 
 if __name__ == '__main__':
-        app.run(host="0.0.0.0", debug=False)
+        app.run(host="0.0.0.0", debug=True)
