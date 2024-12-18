@@ -1,4 +1,7 @@
-// チャンネルを登録する時の処理
+/*
+チャンネルを登録するモーダルの制御
+*/
+
 
 const createChannelModal = document.getElementById("create-channel-modal");
 const addPageButtonClose = document.getElementById("add-page-close-button");
@@ -6,8 +9,8 @@ const createChannelConfirmButton = document.getElementById(
   "create-channel-confirmation-button"
 );
 
-// pagination.jsでチャンネル一覧が表示されるのを待ってから読みこまれる
-// (チャンネル一覧を表示する処理が終わるまでaddChannelButtonは存在しないためundefinedになる)
+// pagination.jsでチャンネル一覧の表示処理が終了してから読みこまれる
+// (チャンネル一覧を表示する処理が終わるまでcreateChannelButtonは存在しないためundefinedになる)
 const loadCreateChannelButton = () => {
   const createChannelButton = document.getElementById("create-channel-button");
 

@@ -140,7 +140,7 @@ const pagination = () => {
 }
 };
 
-// 画面がロードされる時の処理（ページネーションを作成し、その後チャンネル追加ボタンを作成・表示）
+// DOMツリーが構築されたらpagination関数を発火（ページネーションを作成し、その後チャンネル追加ボタンを作成・表示）
 document.addEventListener("DOMContentLoaded", function () {
   try {
     pagination() ? loadCreateChannelButton() : (() => {throw new Error(`エラーが発生しました`)});
