@@ -15,7 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Sawarabi+Mincho&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="../static/img/favicon.ico" />
+    <link rel="icon" href="{{ url_for('static', filename='/img/favicon.ico') }}" />
   </head>
   <body>
     {% include 'util/sidebar.html'%} {% include 'util/mobile-header.html'%} {% block
