@@ -1,16 +1,7 @@
 /* 各チャンネル詳細ページのCSS */
 
-.chat-box {
-  min-height: 100vh;
-  width: 100%;
-  background-color: var(--snow);
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 54px;
-  right: 0;
-  width: calc(100vw - 64px);
-}
+
+/* ========================== ヘッダー部分 ============================= */
 
 #chat-header {
   background-color: var(--navy_blue);
@@ -55,20 +46,21 @@
   cursor: pointer;
 }
 
-/* メッセージエリア */
+/* ========================== メッセージ表示エリア ============================= */
 
 #message-area {
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
   padding-top: 10vh;
   padding-right: 20px;
-  padding-bottom: calc(20vh + 10px);
   padding-left: 20px;
   overflow-y: scroll;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  margin-bottom: 16vh;
+  scroll-margin-bottom: 16vh;
 }
 
 ::-webkit-scrollbar {
@@ -148,19 +140,10 @@
 }
 
 #no-message {
-  padding-top: 54px;
-  width: 100%;
-  height: calc(100vh - (54px + 15vh));
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: auto;
 }
 
-#no-message p {
-  display: inline;
-}
-
-/* ========================================================== */
+/* ========================== メッセージ入力部分 ============================= */
 
 .typing-box-wrapper {
   position: fixed;
@@ -214,8 +197,8 @@
   font-size: 1.3rem;
 }
 
-/* ========================================================== */
-/* レスポンシブ */
+
+/* ========================== レスポンシブ ============================= */
 
 @media screen and (max-width: 550px) {
   #chatroom-description {
@@ -224,11 +207,6 @@
 }
 
 @media screen and (max-width: 639px) {
-  .chat-box {
-    padding-left: 0;
-    width: 100%;
-  }
-
   .typing-box-wrapper,
   #chat-header {
     width: 100%;
