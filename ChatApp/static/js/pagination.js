@@ -10,6 +10,7 @@ const deleteChannelModal = document.getElementById("delete-channel-modal");
 チャンネル名、削除ボタンを作成・制御。
 */
 const pagination = () => {
+  try{
   let page = 1; // 今何ページ目にいるか
   const STEP = 6; // ステップ数（1ページに表示する項目数）
 
@@ -33,14 +34,13 @@ const pagination = () => {
     pageNumber.addEventListener("click", (e) => {
       const targetPageNum = e.target.dataset.pageNum;
       page = Number(targetPageNum);
-      show(page, STEP);
-      colorPaginationNum();
+      init(page, STEP);
     });
     pageCount++;
   }
 
   // 各チャンネル名と削除ボタンの要素を作成
-  const show = (page, STEP) => {
+  const createChannelsList = (page, STEP) => {
     const ul = document.querySelector(".channel-box");
     // 一度チャンネルリストを空にする
     ul.innerHTML = "";
@@ -110,31 +110,42 @@ const pagination = () => {
     paginationArr[page - 1].classList.add("colored");
   };
 
-  // 最初に1ページ目を表示
-  show(page, STEP);
-  colorPaginationNum();
+  const init = (page, STEP) => {
+    createChannelsList(page, STEP);
+    colorPaginationNum();
+    loadCreateChannelButton();
+  }
+  // 初期動作時に1ページ目を表示
+  init(page, STEP);
 
   // 前ページ遷移
   document.getElementById("prev").addEventListener("click", () => {
     if (page <= 1) return;
     page = page - 1;
-    show(page, STEP);
-    colorPaginationNum();
-    loadCreateChannelButton();
+    init(page, STEP);
   });
 
   // 次ページ遷移
   document.getElementById("next").addEventListener("click", () => {
     if (page >= channels.length / STEP) return;
     page = page + 1;
-    show(page, STEP);
-    colorPaginationNum();
-    loadCreateChannelButton();
+    init(page, STEP);
   });
+
+  return true
+
+} catch(error) {
+  console.log(`エラー：${error}`);
+  return false
+}
 };
 
 // 画面がロードされる時の処理（ページネーションを作成し、その後チャンネル追加ボタンを作成・表示）
-window.onload = () => {
-  // pagination関数（asyncが完了したらチャンネル追加ボタンを読み込む）
-  pagination().then(loadCreateChannelButton);
-};
+document.addEventListener("DOMContentLoaded", function () {
+  try {
+    pagination() ? loadCreateChannelButton() : (() => {throw new Error(`エラーが発生しました`)});
+    
+  } catch (error) {
+    console.log(`エラー：${error}`);
+  }
+});
