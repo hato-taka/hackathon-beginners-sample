@@ -92,12 +92,13 @@ def logout():
 # チャンネル一覧ページの表示
 @app.route('/channels', methods=['GET'])
 def channels_view():
-    if 'uid' not in session:
+    uid = session.get('uid')
+    if uid is None:
         return redirect(url_for('login_view'))
     else:
         channels = Channel.get_all()
         channels.reverse()
-    return render_template('channels.html', channels=channels, uid=uid)
+        return render_template('channels.html', channels=channels, uid=uid)
 
 
 # チャンネルの作成
@@ -121,7 +122,8 @@ def create_channel():
 # チャンネルの更新
 @app.route('/channels/update/<cid>', methods=['POST'])
 def update_channel(cid):
-    if 'uid' not in session:
+    uid = session.get('uid')
+    if uid is None:
         return redirect(url_for('login_view'))
 
     channel_name = request.form.get('channelTitle')
@@ -135,7 +137,8 @@ def update_channel(cid):
 # チャンネルの削除
 @app.route('/channels/delete/<cid>', methods=['POST'])
 def delete_channel(cid):
-    if 'uid' not in session:
+    uid = session.get('uid')
+    if uid is None:
         return redirect(url_for('login_view'))
 
     channel = Channel.find_by_cid(cid)
@@ -151,7 +154,8 @@ def delete_channel(cid):
 # チャンネル詳細ページの表示（各チャンネル内で、そのチャンネルに属している全メッセージを表示させる）
 @app.route('/channels/<cid>/messages', methods=['GET'])
 def detail(cid):
-    if 'uid' not in session:
+    uid = session.get('uid')
+    if uid is None:
         return redirect(url_for('login_view'))
 
     channel = Channel.find_by_cid(cid)
@@ -163,7 +167,8 @@ def detail(cid):
 # メッセージの投稿
 @app.route('/channels/<cid>/messages', methods=['POST'])
 def create_message(cid):
-    if 'uid' not in session:
+    uid = session.get('uid')
+    if uid is None:
         return redirect(url_for('login_view'))
 
     message = request.form.get('message')
@@ -177,7 +182,8 @@ def create_message(cid):
 # メッセージの削除
 @app.route('/channels/<cid>/messages/<message_id>', methods=['POST'])
 def delete_message(cid, message_id):
-    if 'uid' not in session:
+    uid = session.get('uid')
+    if uid is None:
         return redirect(url_for('login_view'))
 
     if message_id:
