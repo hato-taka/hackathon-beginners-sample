@@ -2,63 +2,59 @@
 チャンネルを登録するモーダルの制御
 */
 
-
-const createChannelModal = document.getElementById("create-channel-modal");
-const addPageButtonClose = document.getElementById("add-page-close-button");
-const createChannelConfirmButton = document.getElementById(
-  "create-channel-confirmation-button"
-);
-
 // pagination.jsでチャンネル一覧の表示処理が終了してから読みこまれる
 // (チャンネル一覧を表示する処理が終わるまでcreateChannelButtonは存在しないためundefinedになる)
-const loadCreateChannelButton = () => {
+export const initCreateChannelModal = () => {
+  const createChannelModal = document.getElementById("create-channel-modal");
+  const addPageButtonClose = document.getElementById("add-page-close-button");
+
   const createChannelButton = document.getElementById("create-channel-button");
 
   // モーダル表示ボタンが押された時にモーダルを表示する
   createChannelButton.addEventListener("click", () => {
     createChannelModal.style.display = "flex";
   });
-};
 
-// モーダル内のXボタンが押された時にモーダルを非表示にする
-addPageButtonClose.addEventListener("click", () => {
-  createChannelModal.style.display = "none";
-});
-
-// 画面のどこかが押された時にモーダルを非表示にする
-addEventListener("click", (e) => {
-  if (e.target == createChannelModal) {
+  // モーダル内のXボタンが押された時にモーダルを非表示にする
+  addPageButtonClose.addEventListener("click", () => {
     createChannelModal.style.display = "none";
-  }
-});
+  });
 
-// create-channel-modalが表示されている時に Ctrl/Command + Enterで送信
-// Enterで自動送信を防ぐ
-document.addEventListener("keydown", keydownEvent);
+  // 画面のどこかが押された時にモーダルを非表示にする
+  addEventListener("click", (e) => {
+    if (e.target == createChannelModal) {
+      createChannelModal.style.display = "none";
+    }
+  });
 
-function keydownEvent(e) {
-  const newChannelTitle = document.createChannelForm.channelTitle.value;
+  // create-channel-modalが表示されている時に Ctrl/Command + Enterで送信
+  // Enterで自動送信を防ぐ
+  document.addEventListener("keydown", keydownEvent);
 
-  const createChannelModal = document.getElementById("create-channel-modal");
-  const createChannelModalStyle = getComputedStyle(
-    createChannelModal,
-    null
-  ).getPropertyValue("display");
+  function keydownEvent(e) {
+    const newChannelTitle = document.createChannelForm.channelTitle.value;
 
-  if (e.code === "Enter") {
-    e.preventDefault();
-  }
+    const createChannelModal = document.getElementById("create-channel-modal");
+    const createChannelModalStyle = getComputedStyle(
+      createChannelModal,
+      null
+    ).getPropertyValue("display");
 
-  if (
-    ((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) &&
-    e.keyCode == 13
-  ) {
     if (e.code === "Enter") {
-      if (createChannelModalStyle !== "none") {
-        if (newChannelTitle !== "") {
-          document.createChannelForm.submit();
+      e.preventDefault();
+    }
+
+    if (
+      ((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) &&
+      e.keyCode == 13
+    ) {
+      if (e.code === "Enter") {
+        if (createChannelModalStyle !== "none") {
+          if (newChannelTitle !== "") {
+            document.createChannelForm.submit();
+          }
         }
       }
     }
   }
-}
+};
