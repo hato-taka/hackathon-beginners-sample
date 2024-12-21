@@ -1,4 +1,7 @@
-// チャンネルを更新する時の処理
+/*
+チャンネルを更新するモーダルの制御
+*/
+
 
 const updateButton = document.getElementById("channel-update-button");
 const updateChannelModal = document.getElementById("update-channel-modal");

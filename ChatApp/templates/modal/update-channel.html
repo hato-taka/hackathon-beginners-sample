@@ -7,7 +7,7 @@
     <form
       name="updateChannelForm"
       class="modal-body"
-      action="/update_channel"
+      action="/channels/update/{{ channel.id }}"
       method="POST"
     >
       <input
@@ -15,6 +15,7 @@
         placeholder="Channel name"
         class="channel-form-input"
         name="channelTitle"
+        required
       />
       <input
         type="text"
@@ -22,7 +23,6 @@
         class="channel-form-input"
         name="channelDescription"
       />
-      <input type="hidden" name="cid" value="{{ channel.id }}" />
       <button>EDIT</button>
     </form>
   </div>

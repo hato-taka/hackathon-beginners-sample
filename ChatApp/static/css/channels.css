@@ -60,23 +60,12 @@
 
 /* ========================================================== */
 
-#channels-list-container {
+#channels-list {
   padding-top: 13vh;
   display: flex;
-  justify-content: center;
+  justify-content: column;
   align-items: center;
-  flex-direction: column;
-  width: 100%;
-  min-height: calc(100vh - 11vh);
-  margin-top: 11vh;
-  margin-left: auto;
-  padding-bottom: 38px;
-}
-
-#channels-list {
-  width: 70%;
-  display: flex;
-  flex-direction: column;
+  min-width: 50%;
 }
 
 .channel-box {
@@ -94,7 +83,6 @@
 
 .channel-box li a {
   color: grey;
-  flex-grow: 1;
 }
 
 .channel-box li a:hover {
@@ -124,12 +112,12 @@
   background-color: var(--snow) !important;
 }
 
-#add-channel-button {
+#create-channel-button {
   font-size: 22px;
   padding: 4px 0;
 }
 
-#add-channel-button:hover {
+#create-channel-button:hover {
   cursor: pointer;
 }
 
@@ -206,12 +194,12 @@
 #prev:hover,
 #next:hover {
   cursor: pointer;
-  color: var(--navy_blue);
+  color: var(--salmon_pink);
 }
 
 #prev:hover span,
 #next:hover span {
-  color: var(--navy_blue);
+  color: var(--salmon_pink);
 }
 
 #prev span {

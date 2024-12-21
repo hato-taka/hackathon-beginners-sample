@@ -1,17 +1,17 @@
 import pymysql
+from pymysqlpool.pool import Pool
+
 
 class DB:
-    def getConnection():
-        try:
-            conn = pymysql.connect(
+    def init_db_pool():
+        pool = Pool(
             host="db",
-            db="chatapp",
             user="testuser",
             password="testuser",
-            charset="utf8",
+            database="chatapp",
+            max_size=5,
+            charset="utf8mb4",
             cursorclass=pymysql.cursors.DictCursor
         )
-            return conn
-        except (ConnectionError):
-            print("コネクションエラーです")
-            conn.close()
+        pool.init()
+        return pool

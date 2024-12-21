@@ -6,9 +6,7 @@ body %}
       <div class="error-title"><span>SORRY</span></div>
       <div class="error-description">
         <p>{{ error_message }}</p>
-        <button class="error-button pink">
-          <a href="{{ url_for('index') }}">戻る</a>
-        </button>
+          <a class="error-button pink" href="{{ url_for('channels_view') }}">戻る</a>
       </div>
     </div>
   </div>

@@ -13,7 +13,7 @@
   align-items: center;
 }
 
-#add-channel-modal,
+#create-channel-modal,
 #update-channel-modal,
 #delete-channel-modal {
   display: none;

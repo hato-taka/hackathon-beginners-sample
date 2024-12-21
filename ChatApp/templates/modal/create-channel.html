@@ -1,15 +1,21 @@
-<div id="add-channel-modal" class="modal">
+<div id="create-channel-modal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
       <h5>Add channel</h5>
       <span class="modalClose" id="add-page-close-button">×</span>
     </div>
-    <form name="addChannelForm" class="modal-body" action="/" method="POST">
+    <form
+      name="createChannelForm"
+      class="modal-body"
+      action="/channels"
+      method="POST"
+    >
       <input
         type="text"
         placeholder="Channel name"
         class="channel-form-input"
         name="channelTitle"
+        required
       />
       <input
         type="text"
@@ -17,7 +23,7 @@
         class="channel-form-input"
         name="channelDescription"
       />
-      <button id="add-channel-confirmation-button">登録</button>
+      <button>登録</button>
     </form>
   </div>
 </div>
