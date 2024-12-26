@@ -15,3 +15,5 @@ RUN pip install -U pip && \
     pip install -r requirements.txt
 # ソースコードをコンテナにコピー
 COPY . /code/
+# Flaskのアプリケーションを実行
+CMD ["python", "app.py"]

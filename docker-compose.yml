@@ -1,6 +1,3 @@
-# docker-composeのバージョンを指定
-version: "3.9"
-
 # db(MySQL),app(Flask)のコンテナを作成
 services:
   db:
@@ -20,10 +17,13 @@ services:
       - mysql_data:/var/lib/mysql
     # コンテナ内の環境変数を設定
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=chatapp
-      - MYSQL_USER=testuser
-      - MYSQL_PASSWORD=testuser
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    # .envファイルから環境変数を読み込む
+    env_file:
+      - .env
     # DBのコンテナのヘルスチェックを行う
     # mysqladmin(MySQLサーバーの管理を行うクライアントを使ってDBコンテナ自身(127.0.0.1)にpingを送ってヘルスチェックを行う
     healthcheck:
@@ -49,16 +49,19 @@ services:
     # ローカルのカレントディレクトリをコンテナの/codeにマウントする
     volumes:
       - ./ChatApp:/code
-    # ローカルの5000番ポートとコンテナの5000番ポートをつなぐ
+    # ローカルのFlaskポートとコンテナの5000番ポートをつなぐ
     ports:
-      - "5000:5000"
+      - "${FLASK_PORT}:5000"
     # コマンドを実行
-    command:  bash -c "python app.py"
+    #  command: bash -c "python app.py"
     # 先にdbを起動してからappを起動する
     depends_on:
       db:
         # dbのヘルスチェックが終わってからappを起動させる
         condition: service_healthy
+    # .envファイルから環境変数を読み込む
+    env_file:
+      - .env
 
 volumes:
   mysql_data:
