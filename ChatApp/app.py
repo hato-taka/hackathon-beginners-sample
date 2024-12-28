@@ -22,6 +22,15 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
 bundle_css_files(app)
 
 
+# ルートページのリダイレクト処理
+@app.route('/', methods=['GET'])
+def index():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    return redirect(url_for('channels_view'))
+
+
 # サインアップページの表示
 @app.route('/signup', methods=['GET'])
 def signup_view():
