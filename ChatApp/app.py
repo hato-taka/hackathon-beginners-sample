@@ -3,26 +3,38 @@ from datetime import timedelta
 import hashlib
 import uuid
 import re
+import os
 
 from models import User, Channel, Message
 from util.assets import bundle_css_files
 
 
+# 定数定義
+EMAIL_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+SESSION_DAYS = 30
+
 app = Flask(__name__)
-app.secret_key = uuid.uuid4().hex
-app.permanent_session_lifetime = timedelta(days=30)
+app.secret_key = os.getenv('SECRET_KEY', uuid.uuid4().hex)
+app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 # 静的ファイルをキャッシュする設定。開発中はコメントアウト推奨。
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 2678400
 bundle_css_files(app)
 
 
+# ルートページのリダイレクト処理
+@app.route('/', methods=['GET'])
+def index():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    return redirect(url_for('channels_view'))
+
 
 # サインアップページの表示
 @app.route('/signup', methods=['GET'])
 def signup_view():
     return render_template('auth/signup.html')
-
 
 
 # サインアップ処理
@@ -33,13 +45,11 @@ def signup_process():
     password = request.form.get('password')
     passwordConfirmation = request.form.get('password-confirmation')
 
-    pattern = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-
     if name == '' or email =='' or password == '' or passwordConfirmation == '':
         flash('空のフォームがあるようです')
     elif password != passwordConfirmation:
         flash('二つのパスワードの値が違っています')
-    elif re.match(pattern, email) is None:
+    elif re.match(EMAIL_PATTERN, email) is None:
         flash('正しいメールアドレスの形式ではありません')
     else:
         uid = uuid.uuid4()
@@ -56,12 +66,10 @@ def signup_process():
     return redirect(url_for('signup_process'))
 
 
-
 # ログインページの表示
 @app.route('/login', methods=['GET'])
 def login_view():
     return render_template('auth/login.html')
-
 
 
 # ログイン処理
@@ -86,13 +94,11 @@ def login_process():
     return redirect(url_for('login_view'))
 
 
-
 # ログアウト
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login_view'))
-
 
 
 # チャンネル一覧ページの表示
@@ -105,7 +111,6 @@ def channels_view():
         channels = Channel.get_all()
         channels.reverse()
         return render_template('channels.html', channels=channels, uid=uid)
-
 
 
 # チャンネルの作成
@@ -126,7 +131,6 @@ def create_channel():
         return render_template('error/error.html', error_message=error)
 
 
-
 # チャンネルの更新
 @app.route('/channels/update/<cid>', methods=['POST'])
 def update_channel(cid):
@@ -139,7 +143,6 @@ def update_channel(cid):
 
     Channel.update(uid, channel_name, channel_description, cid)
     return redirect(f'/channels/{cid}/messages')
-
 
 
 # チャンネルの削除
@@ -158,7 +161,6 @@ def delete_channel(cid):
     return redirect(url_for('channels_view'))
 
 
-
 # チャンネル詳細ページの表示（各チャンネル内で、そのチャンネルに属している全メッセージを表示させる）
 @app.route('/channels/<cid>/messages', methods=['GET'])
 def detail(cid):
@@ -170,7 +172,6 @@ def detail(cid):
     messages = Message.get_all(cid)
 
     return render_template('messages.html', messages=messages, channel=channel, uid=uid)
-
 
 
 # メッセージの投稿
@@ -188,7 +189,6 @@ def create_message(cid):
     return redirect('/channels/{cid}/messages'.format(cid = cid))
 
 
-
 # メッセージの削除
 @app.route('/channels/<cid>/messages/<message_id>', methods=['POST'])
 def delete_message(cid, message_id):
@@ -201,11 +201,9 @@ def delete_message(cid, message_id):
     return redirect('/channels/{cid}/messages'.format(cid = cid))
 
 
-
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error/404.html'),404
-
 
 
 @app.errorhandler(500)
@@ -213,6 +211,5 @@ def internal_server_error(error):
     return render_template('error/500.html'),500
 
 
-
 if __name__ == '__main__':
-        app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", debug=True)
