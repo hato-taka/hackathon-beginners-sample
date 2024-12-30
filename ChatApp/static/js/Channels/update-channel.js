@@ -2,7 +2,6 @@
 チャンネルを更新するモーダルの制御
 */
 
-
 const updateButton = document.getElementById("channel-update-button");
 const updateChannelModal = document.getElementById("update-channel-modal");
 const updatePageButtonClose = document.getElementById(
